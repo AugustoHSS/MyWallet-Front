@@ -29,9 +29,9 @@ export default function Statement() {
         <div>
           {statements.map((statement) => {
             if (statement.isOutput) {
-              balance -= statement.value;
+              balance -= parseInt(statement.value, 10);
             } else {
-              balance += statement.value;
+              balance += parseInt(statement.value, 10);
             }
             return (
               <Movement>
@@ -39,7 +39,11 @@ export default function Statement() {
                   <Date>{statement.date}</Date>
                   <Description>{statement.description}</Description>
                 </div>
-                <Value isOutput={statement.isOutput}>{statement.value.toFixed(2)}</Value>
+                <Value
+                  isOutput={statement.isOutput}
+                >
+                  {parseInt(statement.value, 10).toFixed(2)}
+                </Value>
               </Movement>
 
             );
