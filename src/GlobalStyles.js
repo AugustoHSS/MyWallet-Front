@@ -13,11 +13,17 @@ export default createGlobalStyle`
     cursor: pointer;
   }
   a{
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 15px;
-        line-height: 18px;
-        color: #FFFFFF;
-        margin-top: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 18px;
+    color: #FFFFFF;
+    margin-top: 30px;
     }
+  h1{
+    font-weight: bold;
+    font-size: 26px;
+    line-height: 31px;
+    color: #FFFFFF;
+  }
 `;

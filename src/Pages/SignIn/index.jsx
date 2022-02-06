@@ -1,24 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Logo from '../../Images/Logo.png';
 import Input from '../../Components/Input';
 import InputButton from '../../Components/InputButton';
 import Container from './styles';
+import UserContext from '../../contexts/userContext';
 
 export default function SignIn() {
+  const { setLoginResponse } = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   function doLogin(e) {
     e.preventDefault();
-    const request = axios.post('http://localhost:5000/sign-in', {
+    const promise = axios.post('http://localhost:5000/sign-in', {
       email,
       password,
     });
-    request.then(() => navigate('/statement'));
-    request.catch((error) => alert(error.response.data));
+    promise.then((response) => { navigate('/statement'); setLoginResponse(response.data); });
+    promise.catch((error) => alert(error.response.data));
   }
   return (
     <Container>

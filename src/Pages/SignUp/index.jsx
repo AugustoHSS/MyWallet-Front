@@ -19,13 +19,13 @@ export default function signUp() {
       alert('As senhas não são iguais. Tente novamente.');
       return;
     }
-    const request = axios.post('http://localhost:5000/sign-up', {
+    const promise = axios.post('http://localhost:5000/sign-up', {
       name,
       email,
       password,
     });
-    request.then(() => navigate('/'));
-    request.catch((error) => alert(error.response.data));
+    promise.then(() => navigate('/'));
+    promise.catch((error) => alert(error.response.data));
   }
   return (
     <Container>
