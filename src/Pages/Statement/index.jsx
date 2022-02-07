@@ -1,26 +1,36 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
   Container, Statements, MovementButton, ButtonContainer, Header,
   WithoutMovements, Date, Description, Value, Movement, Balance, BalanceValue,
+  RemoveMovement,
 } from './styles';
 import UserContext from '../../contexts/userContext';
 
 export default function Statement() {
   const navigate = useNavigate();
-  const { loginResponse } = useContext(UserContext);
+  const { loginResponse, setLoginResponse } = useContext(UserContext);
   const [statements, setStatements] = useState([]);
   const authorization = {
     headers: {
       Authorization: `Bearer ${loginResponse.token}`,
     },
   };
-
   useEffect(() => {
-    const promise = axios.get('http://localhost:5000/statement', authorization);
-    promise.then((answer) => { setStatements(answer.data); });
-  }, []);
+    if (loginResponse.token !== undefined) {
+      const promise = axios.get('http://localhost:5000/statement', authorization);
+      promise.then((answer) => { setStatements(answer.data); });
+    }
+  }, [loginResponse, statements]);
+
+  function removeMovement(id) {
+    const answer = window.confirm('Você realmente deseja deletar esse movimento?');
+    if (answer) {
+      axios.delete(`http://localhost:5000/movements/${id}`, authorization);
+    }
+  }
 
   function printStatement() {
     let balance = 0;
@@ -29,20 +39,19 @@ export default function Statement() {
         <div>
           {statements.map((statement) => {
             if (statement.isOutput) {
-              balance -= parseInt(statement.value, 10);
+              balance -= parseFloat(statement.value);
             } else {
-              balance += parseInt(statement.value, 10);
+              balance += parseFloat(statement.value, 10);
             }
             return (
-              <Movement>
+              <Movement key={statement._id}>
                 <div>
                   <Date>{statement.date}</Date>
                   <Description>{statement.description}</Description>
                 </div>
-                <Value
-                  isOutput={statement.isOutput}
-                >
-                  {parseInt(statement.value, 10).toFixed(2)}
+                <Value isOutput={statement.isOutput}>
+                  {parseFloat(statement.value, 10).toFixed(2)}
+                  <RemoveMovement onClick={() => removeMovement(statement._id)}>x</RemoveMovement>
                 </Value>
               </Movement>
 
@@ -61,7 +70,7 @@ export default function Statement() {
     <Container>
       <Header>
         <h1>{`Olá, ${loginResponse.name}`}</h1>
-        <ion-icon name="exit-outline" />
+        <ion-icon onClick={() => { navigate('/'); setLoginResponse({ token: 0 }); }} name="exit-outline" />
       </Header>
       <Statements>
         {statements.length === 0 ? (

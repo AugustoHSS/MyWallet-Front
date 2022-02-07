@@ -28,7 +28,6 @@ export default function Movements() {
   function sendToServer(e) {
     e.preventDefault();
     const promise = axios.post('http://localhost:5000/movements', body, authorization);
-    console.log(body);
     promise.then(() => navigate('/statement'));
     promise.catch((error) => alert(error.response.data));
   }

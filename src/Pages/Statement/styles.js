@@ -110,3 +110,11 @@ export const BalanceValue = styled.div`
     line-height: 20px;
     color: ${(props) => (props.isNegative ? '#C70000' : '#03AC00')}
 `;
+
+export const RemoveMovement = styled.button`
+    all: unset;
+    font-size: 16px;
+    line-height: 19px;
+    color: #C6C6C6;
+    margin-left: 8px;
+`;
